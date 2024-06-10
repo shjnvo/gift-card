@@ -29,3 +29,8 @@
 
 en:
   hello: "Hello world"
+  responce_message:
+    uncorrect: 'Email or password was incorrect'
+    logout_success: 'Logout Successfully'
+    please_login: 'Please login to continue'
+    logout_success: 'You have successfully logged out'
