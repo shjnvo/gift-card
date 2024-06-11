@@ -34,3 +34,5 @@ en:
     logout_success: 'Logout Successfully'
     please_login: 'Please login to continue'
     logout_success: 'You have successfully logged out'
+    product:
+      deleted: 'Product was delete'

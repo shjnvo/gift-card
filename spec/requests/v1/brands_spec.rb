@@ -33,8 +33,8 @@ RSpec.describe 'V1::Brands' do
         expect(response.parsed_body['message']).to eq 'Please login to continue'
       end
 
-      it 'cannot create the brand with brand.name is NIL' do
-        params = { customize_fields: { custom1: 'value1', custom2: 'value2' } }
+      it 'cannot create the brand with brand.name is blank' do
+        params = { name: '', customize_fields: { custom1: 'value1', custom2: 'value2' } }
         post '/v1/brands', params:, headers: { 'Authentication' => token }
 
         expect(response).to have_http_status(:unprocessable_entity)
@@ -46,7 +46,8 @@ RSpec.describe 'V1::Brands' do
           name: 'brand1',
           customize_fields: {
             custom1: 'value1', custom2: 'value2', custom3: 'value3',
-            custom4: 'value4', custom5: 'value5', custom6: 'value6' }
+            custom4: 'value4', custom5: 'value5', custom6: 'value6'
+          }
         }
         post '/v1/brands', params:, headers: { 'Authentication' => token }
 
