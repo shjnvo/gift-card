@@ -18,7 +18,9 @@ module Activatable
   private
 
   def set_resource
-    @resource = controller_name.classify.constantize.find(params[:id])
+    @resource = controller_name.classify.constantize.find_by(id: params[:id])
+
+    render status: :no_content unless @resource
   end
 
   def resource_name

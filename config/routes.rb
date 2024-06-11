@@ -2,7 +2,6 @@
 
 Rails.application.routes.draw do
   namespace :v1 do
-    get 'brands/create'
     post 'login', to: 'sessions#create'
     delete 'logout', to: 'sessions#destroy'
     resources :users, only: :create
@@ -10,6 +9,12 @@ Rails.application.routes.draw do
       member do
         patch :activate
         patch :inactivate
+      end
+      resources :products do
+        member do
+          patch :activate
+          patch :inactivate
+        end
       end
     end
   end
