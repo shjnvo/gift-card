@@ -15,8 +15,9 @@
 #
 # Indexes
 #
-#  index_client_cards_on_client_id   (client_id)
-#  index_client_cards_on_product_id  (product_id)
+#  index_client_cards_on_active_number  (active_number) UNIQUE
+#  index_client_cards_on_client_id      (client_id)
+#  index_client_cards_on_product_id     (product_id)
 #
 # Foreign Keys
 #

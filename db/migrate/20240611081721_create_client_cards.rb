@@ -5,7 +5,7 @@ class CreateClientCards < ActiveRecord::Migration[7.1]
       t.references :product, null: false, foreign_key: true
       t.decimal :price
       t.string :currency
-      t.string :active_number
+      t.string :active_number, index: { unique: true }
       t.string :pin_code
       t.integer :state
 

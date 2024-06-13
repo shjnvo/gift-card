@@ -32,6 +32,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_081721) do
     t.integer "state"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["active_number"], name: "index_client_cards_on_active_number", unique: true
     t.index ["client_id"], name: "index_client_cards_on_client_id"
     t.index ["product_id"], name: "index_client_cards_on_product_id"
   end
