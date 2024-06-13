@@ -15,7 +15,7 @@ jobs:
       postgres:
         image: postgres
         ports:
-          - 5431:5432
+          - 5432:5432
         env:
           POSTGRES_USER: ${{ env.DB_USERNAME }}
           POSTGRES_PASSWORD: ${{ env.DB_PASSWORD }}
@@ -30,11 +30,11 @@ jobs:
       - name: Install libcurl
         run: |
           sudo apt-get update
-          sudo apt-get install libcurl4-openssl-dev
+          sudo apt-get install libcurl4-openssl-dev libpq-dev
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.1.0
+          ruby-version: 3.1.4
           bundler-cache: true
       - name: Bundle install
         run: |
@@ -58,8 +58,6 @@ jobs:
           DB_PASSWORD: ${{ env.DB_PASSWORD }}
           DB_HOST: ${{ env.DB_HOST }}
           DB_PORT: ${{ job.services.postgres.ports[5432] }}
-          REDIS_HOST: ${{ env.DB_HOST }}
-          REDIS_PORT: ${{ job.services.redis.ports[6379] }}
         run: |
           CI='' bundle exec rspec --profile 20
       - name: Archive failed rspec screenshots

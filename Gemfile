@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 
-ruby '3.1.0'
+ruby '3.1.4'
 
 gem 'rails', '~> 7.1.3', '>= 7.1.3.4'
 
@@ -26,7 +26,6 @@ end
 
 group :development do
   gem 'annotate'
-  gem 'error_highlight', '>= 0.4.0', platforms: [:ruby]
   gem 'rack-mini-profiler'
   gem 'rubocop', require: false
   gem 'rubocop-capybara', require: false

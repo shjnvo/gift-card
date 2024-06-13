@@ -97,7 +97,6 @@ GEM
       reline (>= 0.3.8)
     diff-lcs (1.5.1)
     drb (2.2.1)
-    error_highlight (0.6.0)
     erubi (1.12.0)
     factory_bot (6.4.6)
       activesupport (>= 5.0.0)
@@ -275,7 +274,6 @@ DEPENDENCIES
   bootsnap
   bullet
   debug
-  error_highlight (>= 0.4.0)
   factory_bot_rails
   faker
   jwt
@@ -293,7 +291,7 @@ DEPENDENCIES
   tzinfo-data
 
 RUBY VERSION
-   ruby 3.1.0p0
+   ruby 3.1.4p223
 
 BUNDLED WITH
-   2.4.22
+   2.5.11

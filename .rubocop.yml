@@ -23,6 +23,7 @@ AllCops:
   Exclude:
     - bin/*
     - db/schema.rb
+    - vendor/**/*
   SuggestExtensions: false
 
 Style/ClassAndModuleChildren:
