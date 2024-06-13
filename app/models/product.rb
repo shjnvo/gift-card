@@ -30,4 +30,8 @@ class Product < ApplicationRecord
   validates :name, presence: true
   validates :price, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validates :currency, presence: true, inclusion: { in: %w[USD EUR GBP JPY AUD CAD MYR SGD VND] }
+
+  def available?
+    brand.active? && active?
+  end
 end

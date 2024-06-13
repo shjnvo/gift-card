@@ -1,4 +1,4 @@
-class V1::ProductsController < ApplicationController
+class V1::Brands::ProductsController < ApplicationController
   include Activatable
 
   before_action :set_product, only: %i[update destroy]

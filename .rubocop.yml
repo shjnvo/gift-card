@@ -26,6 +26,9 @@ AllCops:
 Style/ClassAndModuleChildren:
   EnforcedStyle: compact
 
+Metrics/MethodLength:
+  Max: 15
+
 Style/Documentation:
   Enabled: false
 

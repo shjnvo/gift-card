@@ -34,5 +34,13 @@ en:
     logout_success: 'Logout Successfully'
     please_login: 'Please login to continue'
     logout_success: 'You have successfully logged out'
+    card:
+      cancel: 'Card was successfully cancelled'
+      client_incorrect: 'Client id or serect key was incorrect'
+      product_no_existed: 'Product was not existed'
+      id_incorrect: 'Card id was incorrect'
     product:
       deleted: 'Product was delete'
+  card:
+    message:
+      pin_code_format: 'must be 8 digits'

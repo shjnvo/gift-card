@@ -114,7 +114,7 @@ RSpec.describe 'V1::Products' do
 
         params = {
           name: 'product1', price: nil, currency: 'USD',
-          customize_fields: Array.new(1,2)
+          customize_fields: Array.new(1, 2)
         }
         post "/v1/brands/#{brand.id}/products", params:, headers: { 'Authentication' => token }
 

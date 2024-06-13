@@ -19,6 +19,8 @@ class User < ApplicationRecord
 
   has_secure_password
 
+  has_many :clients, dependent: :destroy
+
   validates :password, length: { minimum: 8 }, on: :create
   validates :email, uniqueness: true, format: URI::MailTo::EMAIL_REGEXP
 
