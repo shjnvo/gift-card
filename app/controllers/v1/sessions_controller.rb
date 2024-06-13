@@ -4,7 +4,7 @@ class V1::SessionsController < ApplicationController
   def create
     if (user = user_authenticaton!)
       jwt_token = JwtService.encode({ user_token: user&.generate_token! })
-      render json: { email: user.email, token: jwt_token }, status: :ok
+      render json: { token: jwt_token }, status: :ok
     else
       render json: { message: I18n.t('responce_message.uncorrect') }, status: :unauthorized
     end
