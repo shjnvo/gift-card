@@ -17,6 +17,7 @@ gem 'bootsnap', require: false
 gem 'tzinfo-data', platforms: %i[mswin mswin64 mingw x64_mingw jruby]
 
 group :development, :test do
+  gem 'bullet'
   gem 'debug', platforms: %i[mri mswin mswin64 mingw x64_mingw]
   gem 'factory_bot_rails'
   gem 'faker'
