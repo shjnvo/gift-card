@@ -3,7 +3,6 @@
 # Table name: client_cards
 #
 #  id            :bigint           not null, primary key
-#  active_method :integer
 #  active_number :string
 #  currency      :string
 #  pin_code      :string

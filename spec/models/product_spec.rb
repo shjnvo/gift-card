@@ -23,5 +23,25 @@
 require 'rails_helper'
 
 RSpec.describe Product do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe 'Product methods' do
+    let!(:product) { create(:product) }
+
+    it '#available? is false when brand is inactive and product is active' do
+      product.brand.inactive!
+      expect(product.active?).to be true
+      expect(product.available?).to be false
+    end
+
+    it '#available? is false when brand is active and product is inactive' do
+      product.inactive!
+      expect(product.brand.active?).to be true
+      expect(product.available?).to be false
+    end
+
+    it '#available? is true when brand is active and product is active' do
+      expect(product.brand.active?).to be true
+      expect(product.active?).to be true
+      expect(product.available?).to be true
+    end
+  end
 end

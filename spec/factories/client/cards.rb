@@ -3,7 +3,6 @@
 # Table name: client_cards
 #
 #  id            :bigint           not null, primary key
-#  active_method :integer
 #  active_number :string
 #  currency      :string
 #  pin_code      :string
@@ -30,6 +29,5 @@ FactoryBot.define do
     product
     active_number { 'active_number' }
     pin_code { '12345678' }
-    active_method { 'active_number' }
   end
 end

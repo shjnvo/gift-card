@@ -29,7 +29,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_081721) do
     t.string "currency"
     t.string "active_number"
     t.string "pin_code"
-    t.integer "active_method"
     t.integer "state"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

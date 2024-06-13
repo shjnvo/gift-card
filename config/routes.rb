@@ -18,6 +18,7 @@ Rails.application.routes.draw do
       end
     end
     resources :clients, only: :create do
+      resources :repots, only: :index, controller: 'clients/reports'
       resources :products, only: :create, controller: 'clients/products'
       resources :cards, only: :create, controller: 'clients/cards' do
         patch :cancel, on: :member
