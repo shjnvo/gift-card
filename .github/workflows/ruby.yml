@@ -1,0 +1,71 @@
+name: rails
+
+on: [push]
+
+env:
+  RAILS_ENV: test
+  DB_USERNAME: postgres
+  DB_PASSWORD: postgres
+  DB_HOST: localhost
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres
+        ports:
+          - 5431:5432
+        env:
+          POSTGRES_USER: ${{ env.DB_USERNAME }}
+          POSTGRES_PASSWORD: ${{ env.DB_PASSWORD }}
+          POSTGRES_DB: ${{ env.RAILS_ENV }}
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install libcurl
+        run: |
+          sudo apt-get update
+          sudo apt-get install libcurl4-openssl-dev
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.1.0
+          bundler-cache: true
+      - name: Bundle install
+        run: |
+          bundle install
+      - name: Rubocop
+        run: |
+          bundle exec rubocop
+      - name: Create test database
+        env:
+          RAILS_ENV: ${{ env.RAILS_ENV }}
+          DB_USERNAME: ${{ env.DB_USERNAME }}
+          DB_PASSWORD: ${{ env.DB_PASSWORD }}
+          DB_HOST: ${{ env.DB_HOST }}
+          DB_PORT: ${{ job.services.postgres.ports[5432] }}
+        run: |
+          bundle exec rails db:create db:migrate RAILS_ENV=test
+      - name: Build and test with RSpec
+        env:
+          RAILS_ENV: ${{ env.RAILS_ENV }}
+          DB_USERNAME: ${{ env.DB_USERNAME }}
+          DB_PASSWORD: ${{ env.DB_PASSWORD }}
+          DB_HOST: ${{ env.DB_HOST }}
+          DB_PORT: ${{ job.services.postgres.ports[5432] }}
+          REDIS_HOST: ${{ env.DB_HOST }}
+          REDIS_PORT: ${{ job.services.redis.ports[6379] }}
+        run: |
+          CI='' bundle exec rspec --profile 20
+      - name: Archive failed rspec screenshots
+        uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: failures-images
+          path: tmp/capybara
+          retention-days: 3
