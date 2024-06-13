@@ -3,7 +3,6 @@
 # Table name: client_cards
 #
 #  id            :bigint           not null, primary key
-#  active_method :integer
 #  active_number :string
 #  currency      :string
 #  pin_code      :string
@@ -30,7 +29,6 @@ class Client::Card < ApplicationRecord
   belongs_to :client
   belongs_to :product, class_name: '::Product'
 
-  enum :active_method, %i[active_number pin_code]
   enum :state, %i[spending purchased cancelled]
 
   attribute :state, default: -> { :spending }
@@ -41,7 +39,7 @@ class Client::Card < ApplicationRecord
 
   validates :pin_code, presence: true, format: {
     with: /\A\d{8}\z/, message: I18n.t('card.message.pin_code_format')
-  }, if: -> { pin_code? }
+  }
 
   private
 
@@ -51,7 +49,7 @@ class Client::Card < ApplicationRecord
   end
 
   def set_price
-    self.price = product.price * (client.payout_rate / 100.0)
+    self.price = product.price
   end
 
   def set_currency

@@ -6,23 +6,9 @@ RSpec.describe 'V1::Clients::Cards' do
   let!(:product) { create(:product, price: 100) }
 
   describe 'POST /v1/clients/:client_id/cards' do
-    it 'create card success with active_method is active_number' do
+    it 'create card success with is pin_code' do
       create(:client_product, client:, user:, product:)
-      data = { serect_key: client.serect_key, product_id: product.id }
-      post "/v1/clients/#{client.id}/cards", params: data
-      expect(response).to have_http_status(:success)
-      card = Client::Card.first
-
-      expect(response.parsed_body['currency']).to eq product.currency
-      expect(response.parsed_body['price']).to eq card.price.to_s
-      expect(response.parsed_body['active_number']).to eq card.active_number
-      expect(card.pin_code?).to be false
-      expect(response.parsed_body['pin_code'].blank?).to be true
-    end
-
-    it 'create card success with active_method is pin_code' do
-      create(:client_product, client:, user:, product:)
-      data = { serect_key: client.serect_key, product_id: product.id, active_method: :pin_code, pin_code: '12345678' }
+      data = { serect_key: client.serect_key, product_id: product.id, pin_code: '12345678' }
       post "/v1/clients/#{client.id}/cards", params: data
       expect(response).to have_http_status(:success)
       card = Client::Card.first
@@ -36,7 +22,7 @@ RSpec.describe 'V1::Clients::Cards' do
 
     it 'cannot create card when the pin_code format is not digits' do
       create(:client_product, client:, user:, product:)
-      data = { serect_key: client.serect_key, product_id: product.id, active_method: :pin_code, pin_code: 'qwe45678' }
+      data = { serect_key: client.serect_key, product_id: product.id, pin_code: 'qwe45678' }
       post "/v1/clients/#{client.id}/cards", params: data
       expect(response).to have_http_status(:unprocessable_entity)
       expect(response.parsed_body['message']).to including 'Pin code must be 8 digits'
@@ -44,7 +30,7 @@ RSpec.describe 'V1::Clients::Cards' do
 
     it 'cannot create card when the pin_code is blank' do
       create(:client_product, client:, user:, product:)
-      data = { serect_key: client.serect_key, product_id: product.id, active_method: :pin_code, pin_code: '' }
+      data = { serect_key: client.serect_key, product_id: product.id, pin_code: '' }
       post "/v1/clients/#{client.id}/cards", params: data
       expect(response).to have_http_status(:unprocessable_entity)
       expect(response.parsed_body['message']).to including 'Pin code must be 8 digits'

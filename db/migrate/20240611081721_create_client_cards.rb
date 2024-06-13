@@ -7,7 +7,6 @@ class CreateClientCards < ActiveRecord::Migration[7.1]
       t.string :currency
       t.string :active_number
       t.string :pin_code
-      t.integer :active_method
       t.integer :state
 
       t.timestamps
