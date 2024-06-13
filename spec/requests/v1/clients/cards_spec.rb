@@ -24,7 +24,7 @@ RSpec.describe 'V1::Clients::Cards' do
       create(:client_product, client:, user:, product:)
       data = { serect_key: client.serect_key, product_id: product.id, pin_code: 'qwe45678' }
       post "/v1/clients/#{client.id}/cards", params: data
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(422)
       expect(response.parsed_body['message']).to including 'Pin code must be 8 digits'
     end
 
@@ -32,14 +32,14 @@ RSpec.describe 'V1::Clients::Cards' do
       create(:client_product, client:, user:, product:)
       data = { serect_key: client.serect_key, product_id: product.id, pin_code: '' }
       post "/v1/clients/#{client.id}/cards", params: data
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(422)
       expect(response.parsed_body['message']).to including 'Pin code must be 8 digits'
     end
 
     it 'cannot create card when product not belong to the client' do
       data = { serect_key: client.serect_key, product_id: product.id }
       post "/v1/clients/#{client.id}/cards", params: data
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(422)
       expect(response.parsed_body['message']).to eq 'Product was not existed'
     end
 
@@ -48,7 +48,7 @@ RSpec.describe 'V1::Clients::Cards' do
       create(:client_product, client:, user:, product:)
       data = { serect_key: client.serect_key, product_id: product.id }
       post "/v1/clients/#{client.id}/cards", params: data
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(422)
       expect(response.parsed_body['message']).to eq 'Product was not existed'
     end
 
@@ -57,7 +57,7 @@ RSpec.describe 'V1::Clients::Cards' do
       create(:client_product, client:, user:, product:)
       data = { serect_key: client.serect_key, product_id: product.id }
       post "/v1/clients/#{client.id}/cards", params: data
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(422)
       expect(response.parsed_body['message']).to eq 'Product was not existed'
     end
 
@@ -67,7 +67,7 @@ RSpec.describe 'V1::Clients::Cards' do
 
       data = { serect_key: client.serect_key, product_id: product.id }
       post "/v1/clients/#{client2.id}/cards", params: data
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(422)
       expect(response.parsed_body['message']).to eq 'Client id or serect key was incorrect'
     end
 
@@ -77,7 +77,7 @@ RSpec.describe 'V1::Clients::Cards' do
 
       data = { serect_key: client2.serect_key, product_id: product.id }
       post "/v1/clients/#{client.id}/cards", params: data
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(422)
       expect(response.parsed_body['message']).to eq 'Client id or serect key was incorrect'
     end
   end
@@ -103,14 +103,14 @@ RSpec.describe 'V1::Clients::Cards' do
 
       data = { serect_key: client2.serect_key }
       patch "/v1/clients/#{client2.id}/cards/#{card.id}/cancel", params: data
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(422)
       expect(response.parsed_body['message']).to eq 'Card id was incorrect'
     end
 
     it 'cannnot be cancelled the card id is incorrect' do
       data = { serect_key: client.serect_key }
       patch "/v1/clients/#{client.id}/cards/999/cancel", params: data
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(422)
       expect(response.parsed_body['message']).to eq 'Card id was incorrect'
     end
 
@@ -120,7 +120,7 @@ RSpec.describe 'V1::Clients::Cards' do
 
       data = { serect_key: 'invalid_key' }
       patch "/v1/clients/#{client.id}/cards/#{card.id}/cancel", params: data
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(422)
       expect(response.parsed_body['message']).to eq 'Client id or serect key was incorrect'
     end
 
@@ -130,7 +130,7 @@ RSpec.describe 'V1::Clients::Cards' do
 
       data = { serect_key: client.serect_key }
       patch "/v1/clients/9999/cards/#{card.id}/cancel", params: data
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(422)
       expect(response.parsed_body['message']).to eq 'Client id or serect key was incorrect'
     end
   end

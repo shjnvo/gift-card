@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'V1::Clients::Products' do
   let!(:user) { create(:user, password: '123password$') }
-  let!(:token) { get_token(user.email, '123password$') }
+  let!(:token) { user_login(user.email, '123password$') }
   let!(:client) { create(:client, user:, name: 'client1', email: 'test_client@example.com', payout_rate: 95) }
   let!(:product) { create(:product, price: 100) }
 
@@ -68,7 +68,7 @@ RSpec.describe 'V1::Clients::Products' do
         params = { product_ids: [product.id] }
         post "/v1/clients/#{client.id}/products", params:, headers: { 'Authentication' => token }
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(422)
         expect(response.parsed_body['message']).to eq "Product id #{product.id} was unavailable"
       end
 
@@ -79,7 +79,7 @@ RSpec.describe 'V1::Clients::Products' do
         params = { product_ids: [product.id] }
         post "/v1/clients/#{client.id}/products", params:, headers: { 'Authentication' => token }
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(422)
         expect(response.parsed_body['message']).to eq "Product id #{product.id} was unavailable"
       end
 

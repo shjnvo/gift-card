@@ -14,18 +14,18 @@ RSpec.describe 'V1::Users' do
     context 'when register user fails' do
       it 'without password' do
         post '/v1/users', params: { email: 'test_user@example.com' }
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(422)
         expect(response.parsed_body['message']).to including("Password can't be blank")
         expect(response.parsed_body['message']).to including('Password is too short (minimum is 8 characters)')
       end
 
       it 'wrong email format' do
         post '/v1/users', params: { email: 'test_userexample', password: '123password$' }
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(422)
         expect(response.parsed_body['message']).to including('Email is invalid')
 
         post '/v1/users', params: { email: 'test_user@@example.com', password: '123password$' }
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(422)
         expect(response.parsed_body['message']).to including('Email is invalid')
       end
     end

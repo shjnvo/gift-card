@@ -33,7 +33,7 @@ RSpec.describe 'V1::Sessions' do
     end
 
     it 'user logout after login' do
-      token = get_token(user.email, '123password$')
+      token = user_login(user.email, '123password$')
       expect(user.reload.token.present?).to be true
 
       delete '/v1/logout', headers: { 'Authentication' => token }

@@ -59,11 +59,4 @@ jobs:
           DB_HOST: ${{ env.DB_HOST }}
           DB_PORT: ${{ job.services.postgres.ports[5432] }}
         run: |
-          CI='' bundle exec rspec --profile 20
-      - name: Archive failed rspec screenshots
-        uses: actions/upload-artifact@v3
-        if: failure()
-        with:
-          name: failures-images
-          path: tmp/capybara
-          retention-days: 3
+          bundle exec rspec --profile 20

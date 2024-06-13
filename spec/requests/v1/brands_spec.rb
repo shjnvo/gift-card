@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'V1::Brands' do
   let!(:user) { create(:user, password: '123password$') }
-  let!(:token) { get_token(user.email, '123password$') }
+  let!(:token) { user_login(user.email, '123password$') }
 
   describe 'POST v1/brands' do
     context 'without user login' do
@@ -37,7 +37,7 @@ RSpec.describe 'V1::Brands' do
         params = { name: '', customize_fields: { custom1: 'value1', custom2: 'value2' } }
         post '/v1/brands', params:, headers: { 'Authentication' => token }
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(422)
         expect(response.parsed_body['message']).to including("Name can't be blank")
       end
 
@@ -51,7 +51,7 @@ RSpec.describe 'V1::Brands' do
         }
         post '/v1/brands', params:, headers: { 'Authentication' => token }
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(422)
         expect(response.parsed_body['message']).to including('Customize fields cannot have more than 5 fields')
       end
 
@@ -59,19 +59,19 @@ RSpec.describe 'V1::Brands' do
         params = { name: 'brand1', customize_fields: nil }
         post '/v1/brands', params:, headers: { 'Authentication' => token }
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(422)
         expect(response.parsed_body['message']).to including('Customize fields must be a valid JSON object')
 
         params = { name: 'brand1', customize_fields: 'string' }
         post '/v1/brands', params:, headers: { 'Authentication' => token }
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(422)
         expect(response.parsed_body['message']).to including('Customize fields must be a valid JSON object')
 
         params = { name: 'brand1', customize_fields: Array.new(1, 2) }
         post '/v1/brands', params:, headers: { 'Authentication' => token }
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(422)
         expect(response.parsed_body['message']).to including('Customize fields must be a valid JSON object')
       end
 
@@ -79,7 +79,7 @@ RSpec.describe 'V1::Brands' do
         params = { name: 'brand1', state: 'invalid', customize_fields: {} }
         post '/v1/brands', params:, headers: { 'Authentication' => token }
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(422)
         expect(response.parsed_body['message']).to including('State is not included in the list')
       end
     end

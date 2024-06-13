@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'V1::Clients' do
   let!(:user) { create(:user, password: '123password$') }
-  let!(:token) { get_token(user.email, '123password$') }
+  let!(:token) { user_login(user.email, '123password$') }
 
   describe 'POST v1/clients' do
     context 'without user login' do
@@ -38,7 +38,7 @@ RSpec.describe 'V1::Clients' do
         params = { name: '', email: 'test_client@example.com', payout_rate: 95 }
         post '/v1/clients', params:, headers: { 'Authentication' => token }
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(422)
         expect(response.parsed_body['message']).to including("Name can't be blank")
       end
 
@@ -46,7 +46,7 @@ RSpec.describe 'V1::Clients' do
         params = { name: 'client1', email: '', payout_rate: 95 }
         post '/v1/clients', params:, headers: { 'Authentication' => token }
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(422)
         expect(response.parsed_body['message']).to including('Email is invalid')
       end
 
@@ -54,7 +54,7 @@ RSpec.describe 'V1::Clients' do
         params = { name: 'client1', email: 'test_client@example.com', payout_rate: 0 }
         post '/v1/clients', params:, headers: { 'Authentication' => token }
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(422)
         expect(response.parsed_body['message']).to including('Payout rate must be greater than or equal to 1')
       end
 
@@ -62,7 +62,7 @@ RSpec.describe 'V1::Clients' do
         params = { name: 'client1', email: 'test_client@example.com', payout_rate: 101 }
         post '/v1/clients', params:, headers: { 'Authentication' => token }
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(422)
         expect(response.parsed_body['message']).to including('Payout rate must be less than or equal to 100')
       end
 
@@ -70,7 +70,7 @@ RSpec.describe 'V1::Clients' do
         params = { name: 'client1', email: 'test_client@example.com', payout_rate: 95.5 }
         post '/v1/clients', params:, headers: { 'Authentication' => token }
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(422)
         expect(response.parsed_body['message']).to including('Payout rate must be an integer')
       end
     end

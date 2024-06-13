@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'V1::Products' do
   let!(:user) { create(:user, password: '123password$') }
-  let!(:token) { get_token(user.email, '123password$') }
+  let!(:token) { user_login(user.email, '123password$') }
   let!(:brand) { create(:brand) }
 
   describe 'POST v1/brands/:brand_id/products' do
@@ -16,6 +16,7 @@ RSpec.describe 'V1::Products' do
 
     context 'with user login' do
       it 'create product success' do
+
         params = {
           name: 'product1', price: 100.0, currency: 'USD',
           customize_fields: { custom1: 'value1', custom2: 'value2' }
@@ -49,7 +50,7 @@ RSpec.describe 'V1::Products' do
           customize_fields: { custom1: 'value1', custom2: 'value2' }
         }
         post "/v1/brands/#{brand.id}/products", params:, headers: { 'Authentication' => token }
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(422)
         expect(response.parsed_body['message']).to including("Name can't be blank")
       end
 
@@ -59,7 +60,7 @@ RSpec.describe 'V1::Products' do
           customize_fields: { custom1: 'value1', custom2: 'value2' }
         }
         post "/v1/brands/#{brand.id}/products", params:, headers: { 'Authentication' => token }
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(422)
         expect(response.parsed_body['message']).to including("Currency can't be blank")
       end
 
@@ -69,7 +70,7 @@ RSpec.describe 'V1::Products' do
           customize_fields: { custom1: 'value1', custom2: 'value2' }
         }
         post "/v1/brands/#{brand.id}/products", params:, headers: { 'Authentication' => token }
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(422)
         expect(response.parsed_body['message']).to including('Currency is not included in the list')
       end
 
@@ -79,7 +80,7 @@ RSpec.describe 'V1::Products' do
           customize_fields: { custom1: 'value1', custom2: 'value2' }
         }
         post "/v1/brands/#{brand.id}/products", params:, headers: { 'Authentication' => token }
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(422)
         expect(response.parsed_body['message']).to including("Price can't be blank")
       end
 
@@ -89,7 +90,7 @@ RSpec.describe 'V1::Products' do
           customize_fields: { custom1: 'value1', custom2: 'value2' }
         }
         post "/v1/brands/#{brand.id}/products", params:, headers: { 'Authentication' => token }
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(422)
         expect(response.parsed_body['message']).to including('Price is not a number')
       end
 
@@ -100,7 +101,7 @@ RSpec.describe 'V1::Products' do
         }
         post "/v1/brands/#{brand.id}/products", params:, headers: { 'Authentication' => token }
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(422)
         expect(response.parsed_body['message']).to including('Customize fields must be a valid JSON object')
 
         params = {
@@ -109,7 +110,7 @@ RSpec.describe 'V1::Products' do
         }
         post "/v1/brands/#{brand.id}/products", params:, headers: { 'Authentication' => token }
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(422)
         expect(response.parsed_body['message']).to including('Customize fields must be a valid JSON object')
 
         params = {
@@ -118,7 +119,7 @@ RSpec.describe 'V1::Products' do
         }
         post "/v1/brands/#{brand.id}/products", params:, headers: { 'Authentication' => token }
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(422)
         expect(response.parsed_body['message']).to including('Customize fields must be a valid JSON object')
       end
 
@@ -129,7 +130,7 @@ RSpec.describe 'V1::Products' do
         }
         post "/v1/brands/#{brand.id}/products", params:, headers: { 'Authentication' => token }
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(422)
         expect(response.parsed_body['message']).to including('State is not included in the list')
       end
     end
@@ -182,7 +183,7 @@ RSpec.describe 'V1::Products' do
         }
         patch "/v1/brands/#{brand.id}/products/#{product.id}", params:, headers: { 'Authentication' => token }
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(422)
         expect(response.parsed_body['message']).to including("Name can't be blank")
       end
 
@@ -193,7 +194,7 @@ RSpec.describe 'V1::Products' do
         }
         patch "/v1/brands/#{brand.id}/products/#{product.id}", params:, headers: { 'Authentication' => token }
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(422)
         expect(response.parsed_body['message']).to including("Currency can't be blank")
       end
 
@@ -204,7 +205,7 @@ RSpec.describe 'V1::Products' do
         }
         patch "/v1/brands/#{brand.id}/products/#{product.id}", params:, headers: { 'Authentication' => token }
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(422)
         expect(response.parsed_body['message']).to including('Currency is not included in the list')
       end
 
@@ -215,7 +216,7 @@ RSpec.describe 'V1::Products' do
         }
         patch "/v1/brands/#{brand.id}/products/#{product.id}", params:, headers: { 'Authentication' => token }
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(422)
         expect(response.parsed_body['message']).to including("Price can't be blank")
       end
 
@@ -225,7 +226,7 @@ RSpec.describe 'V1::Products' do
           customize_fields: { custom1: 'update_value1', update_custom2: 'value2' }
         }
         patch "/v1/brands/#{brand.id}/products/#{product.id}", params:, headers: { 'Authentication' => token }
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(422)
         expect(response.parsed_body['message']).to including('Price is not a number')
       end
 
@@ -267,7 +268,7 @@ RSpec.describe 'V1::Products' do
         }
         patch "/v1/brands/#{brand.id}/products/#{product.id}", params:, headers: { 'Authentication' => token }
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(422)
         expect(response.parsed_body['message']).to including('State is not included in the list')
       end
 
